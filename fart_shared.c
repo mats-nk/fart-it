@@ -17,7 +17,6 @@
 
 #endif /* !_WIN32 */
 
-
 #ifdef USE_WILDMAT
 /*extern "C"*/
 int wildmat (const char *text, const char *p);
@@ -34,26 +33,25 @@ int analyze_case( const char* in, int inl )
 		char uc = toupper(in[t]);
 		char lc = tolower(in[t]);
 
-		if (uc==lc)						/* char is non-alphabetic	*/
+		if (uc==lc)					/* char is non-alphabetic		*/
 			continue;
 
-		if (uc==in[t])					/* char is uppercase	*/
+		if (uc==in[t])					/* char is uppercase			*/
 			UC++;
-		else							/* char is lowercase	*/
+		else						/* char is lowercase			*/
 			LC++;
 	}
 
-	if (UC==0 && LC==0)					/* no alphabetic chars	*/
+	if (UC==0 && LC==0)					/* no alphabetic chars			*/
 		return 0;
 
-	/* If all the chars are either upper- or lowercase			*/
-	/* we can get rid of the 'unknown' cases					*/
+	/* If all the chars are either upper- or lowercase we can get rid of the 'unknown' cases	*/
 
 	if (UC==0)
-		return ANALYZECASE_LOWER;		/* all lowercase		*/
+		return ANALYZECASE_LOWER;			/* all lowercase			*/
 
 	if (LC==0)
-		return ANALYZECASE_UPPER;		/* all uppercase		*/
+		return ANALYZECASE_UPPER;			/* all uppercase			*/
 
 	return ANALYZECASE_MIXED;
 }
@@ -305,28 +303,28 @@ void free_string( string *s )
 
 typedef long HDIR;
 # define HDIR_FIRST(dir,ent,path)	dir=_findfirst(path,&ent),dir!=-1
-# define HDIR_NEXT(dir,ent)			_findnext(dir,&ent)!=-1
-# define HDIR_CLOSE(dir)			_findclose(dir)
+# define HDIR_NEXT(dir,ent)		_findnext(dir,&ent)!=-1
+# define HDIR_CLOSE(dir)		_findclose(dir)
 
 typedef _finddata_t HDIRENT;
-# define HDIRENT_NAME(ent)	(ent).name
-# define HDIRENT_ISDIR(ent)	((ent).attrib & _A_SUBDIR)
+# define HDIRENT_NAME(ent)		(ent).name
+# define HDIRENT_ISDIR(ent)		((ent).attrib & _A_SUBDIR)
 
 #else // _WIN32
 
-# define DIR_SEPARATOR		'/'
-# define DIR_CURRENT		""
+# define DIR_SEPARATOR			'/'
+# define DIR_CURRENT			""
 # define DIR_PARENT			"../"
 # define USE_WILDMAT
 
 typedef DIR* HDIR;
 # define HDIR_FIRST(dir,ent,path)	dir=opendir(path)?DIR_NEXT(dir,ent):false
-# define HDIR_NEXT(dir,ent)			ent=readdir(dir),ent!=NULL
-# define HDIR_CLOSE(dir)			closedir(dir)
+# define HDIR_NEXT(dir,ent)		ent=readdir(dir),ent!=NULL
+# define HDIR_CLOSE(dir)		closedir(dir)
 
 typedef struct dirent* HDIRENT;
-# define HDIRENT_NAME(ent)	(ent)->d_name
-# define HDIRENT_ISDIR(ent)	((ent)->d_type==DT_DIR)
+# define HDIRENT_NAME(ent)		(ent)->d_name
+# define HDIRENT_ISDIR(ent)		((ent)->d_type==DT_DIR)
 */
 
 /*****************************************************************************/
