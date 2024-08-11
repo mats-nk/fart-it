@@ -14,14 +14,14 @@
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
-//  FART <wc>					Show files that comply with <wc> + final count (find)
+//  FART <wc>				Show files that comply with <wc> + final count (find)
 
-//  FART - <s>					Echo lines from stdin containing <s> + final count
-//  FART -v - <s>				Echo lines from stdin NOT containing <s> + final count
-//  FART <wc> <s>				Find files <wc>, echo lines containing <s> [+ count] (grep)
+//  FART - <s>				Echo lines from stdin containing <s> + final count
+//  FART -v - <s>			Echo lines from stdin NOT containing <s> + final count
+//  FART <wc> <s>			Find files <wc>, echo lines containing <s> [+ count] (grep)
 //  FART -v <wc> <s>			Find files <wc>, echo lines NOT containing <s> [+ count]
 
-//  FART - <s> <r>				Echo lines from stdin containing <s>, but show <r> + final count
+//  FART - <s> <r>			Echo lines from stdin containing <s>, but show <r> + final count
 //  FART -v - <s> <r>			Echo lines from stdin containing <s>, but show <r> + final count
 //  FART <wc> <s> <r>			Find files <wc> with <s>, replace with <r>, show filenames + count
 //  FART -v <wc> <s> <r>		?
@@ -30,9 +30,9 @@
 //  FART -v <wc> <s> "r"		Find files <wc>, remove lines NOT with <s>, show filenames + count
 
 // TODO:
-// * don't touch files if nothing changed							done
+// * don't touch files if nothing changed				done
 // * prevent processing a file twice when fart'ing filenames		done
-// * remove all references to _MAX_PATH								done
+// * remove all references to _MAX_PATH					done
 // * CVS-compatible file renaming
 // * don't use temp file, unless needed
 // * invert-mode for FART
@@ -49,33 +49,33 @@
 
 ///////////////////////////////////////////////////////////////////////////////
 
-#define VERSION				"v1.99d"
+#define VERSION			"v1.99d"
 
 #define _WILDCARD_SEPARATOR	','
 #define WILDCARD_ALL		"*"
 
 #ifdef _WIN32
 
-#include <io.h>							// for _setmode
-#include <fcntl.h>						// for _O_BINARY
-#include <process.h>					// for _spawn
+#include <io.h>			// for _setmode
+#include <fcntl.h>		// for _O_BINARY
+#include <process.h>		// for _spawn
 //#include <conio.h>
 
 # define _DRIVE_SEPARATOR	':'
 # define _DIR_SEPARATOR		'\\'
 # define DIR_CURRENT		""
 # define DIR_SEPARATOR		"\\"
-# define DIR_PARENT			"..\\"
+# define DIR_PARENT		"..\\"
 
 #else // _WIN32
 
-#include <unistd.h>						// for fork,execlp
-#include <sys/wait.h>					// for wait
+#include <unistd.h>		// for fork,execlp
+#include <sys/wait.h>		// for wait
 
 # define _DIR_SEPARATOR		'/'
 # define DIR_CURRENT		"./"
 # define DIR_SEPARATOR		"/"
-# define DIR_PARENT			"../"
+# define DIR_PARENT		"../"
 
 #endif // !_WIN32
 
@@ -83,11 +83,11 @@
 // Output strings (eventually customizable)
 static const char __temp_file[16] = "_fart.~";
 static const char __backup_suffix[16] = ".bak";			// fart.cpp.bak
-static const char __linenumber[16] = "[%4i]";				// [   2]
-static const char __filename[16] = "%s\n";				// fart.cpp
+static const char __linenumber[16] = "[%4i]";			// [   2]
+static const char __filename[16] = "%s\n";			// fart.cpp
 static const char __filename_count[16] = "%s [%i]\n";		// fart.cpp [2]
-static const char __filename_text[16] = "%s :\n";			// fart.cpp :
-static const char __filename_rename[16] = "%s => %s\n";	// fart.CPP => fart.cpp
+static const char __filename_text[16] = "%s :\n";		// fart.cpp :
+static const char __filename_rename[16] = "%s => %s\n";		// fart.CPP => fart.cpp
 
 // Option flags
 bool	_Numbers = false;
@@ -158,9 +158,9 @@ bool	HasWildCard = false;
 char	WildCard[MAXSTRING];
 
 bool	_DoubleCheck = false;
-int		FindLength = 0;
+int	FindLength = 0;
 char	FindString[MAXSTRING];
-int		ReplaceLength = 0;
+int	ReplaceLength = 0;
 char	ReplaceString[MAXSTRING];
 
 char	ReplaceStringLwr[MAXSTRING], ReplaceStringUpr[MAXSTRING];
@@ -236,7 +236,7 @@ int cstyle( char *buffer )
 				// seep through
 			}
 			default:
-				ERRPRINTF1( "Warning: unrecognized character escape sequence: \\%c\n", *cur );
+				ERRPRINTF1( "Warning: unrecognized character escape sequence: \\ %c\n", *cur );
 			case '\\':
 			case '\?':
 			case '\'':
@@ -377,7 +377,7 @@ int _findtext( FILE* f, const char *filename )
 {
 	int	this_find_count=0;					// number of occurences in this file
 	bool first = true;						// first occurence in this file?
-	int ln=0;								// line number
+	int ln=0;							// line number
 
 	while (!feof(f))
 	{
@@ -521,9 +521,9 @@ static char fout[256] = {0};
 
 	if (!fout[0])
 	{
-		memset( fout, 1, 256 );					// not allowed
-		memset( fout, 0, 128 );					// allowed <128
-		memset( fout, 4, 32 );					// more expensive <32
+		memset( fout, 1, 256 );				// not allowed
+		memset( fout, 0, 128 );				// allowed <128
+		memset( fout, 4, 32 );				// more expensive <32
 		fout[0x9]=fout[0xA]=fout[0xD]=0;		// allowed: TAB CR LF
 	}
 
@@ -930,7 +930,7 @@ int for_all_wildcards( char *wildcard, file_func_t _ff )
 #endif
 		if (dir_sep)
 		{
-			dir_sep++;					// points to filename after slash
+			dir_sep++;				// points to filename after slash
 			if (*dir_sep)				// filename available?
 			{
 				char *path = strdup(wildcard);
@@ -958,7 +958,7 @@ int for_all_wildcards( char *wildcard, file_func_t _ff )
 			break;
 
 		*wc_sep = _WILDCARD_SEPARATOR;		// restore
-		wildcard = wc_sep + 1;				// next piece
+		wildcard = wc_sep + 1;			// next piece
 	}
 	return count;
 }
@@ -1201,7 +1201,7 @@ int main( int argc, char* argv[] )
 
 	// Case insensitive: we compare in lower case
 	if (_IgnoreCase && FindLength)
-		strlwr(FindString);									// FIXME: memlwr
+		strlwr(FindString);							// FIXME: memlwr
 
 	bool grepMode = (ReplaceLength==0);						// grep or fart?
 
@@ -1211,7 +1211,7 @@ int main( int argc, char* argv[] )
 		if (!_IgnoreCase && memcmp(FindString,ReplaceString,FindLength)==0)
 		{
 			ERRPRINTF( "Warning: strings are identical.\n");
-			grepMode = true;								// 'grep' mode
+			grepMode = true;						// 'grep' mode
 		}
 	}
 
@@ -1224,7 +1224,7 @@ int main( int argc, char* argv[] )
 		}
 		// ReplaceString was not initialized by parse_options; do it here
 		ReplaceString[0] = 0;
-		grepMode = false;									// fart mode
+		grepMode = false;							// fart mode
 	}
 
 	if (grepMode)
@@ -1259,9 +1259,9 @@ int main( int argc, char* argv[] )
 		if (_IgnoreCase)
 		{
 //			memcpy( ReplaceStringLwr, ReplaceString, ReplaceLength+1 );
-//			strlwr( ReplaceStringLwr );							// FIXME: memlwr
+//			strlwr( ReplaceStringLwr );					// FIXME: memlwr
 			memcpy( ReplaceStringUpr, ReplaceString, ReplaceLength+1 );
-			strupr( ReplaceStringUpr );							// FIXME: memlwr
+			strupr( ReplaceStringUpr );					// FIXME: memlwr
 			// We now have 3 strings: Lower, Mixed and Upper
 		}
 		else
@@ -1269,10 +1269,10 @@ int main( int argc, char* argv[] )
 			// OPTIMIZE: We only need to adapt the replace_string once
 			int i = analyze_case(FindString,FindLength);
 			if (i==ANALYZECASE_LOWER)
-				strlwr(ReplaceString);							// FIXME: memlwr
+				strlwr(ReplaceString);					// FIXME: memlwr
 			else
 			if (i==ANALYZECASE_UPPER)
-				strupr(ReplaceString);							// FIXME: memlwr
+				strupr(ReplaceString);					// FIXME: memlwr
 			if (i && _Verbose)
 				ERRPRINTF1( "FART: actual replace_string=\"%s\"\n", ReplaceString );
 			_AdaptCase = false;
